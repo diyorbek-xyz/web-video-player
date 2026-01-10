@@ -1,0 +1,21 @@
+{
+  "name": "test",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "lit": "^3.3.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.7.4",
+    "prettier-plugin-css-order": "^2.2.0",
+    "prettier-plugin-organize-imports": "^4.3.0",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4"
+  }
+}

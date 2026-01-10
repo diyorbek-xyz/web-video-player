@@ -1,0 +1,9 @@
+{
+	"bracketSameLine": true,
+	"jsxSingleQuote": true,
+	"printWidth": 300,
+	"singleQuote": true,
+	"tabWidth": 4,
+	"useTabs": true,
+	"plugins": ["prettier-plugin-organize-imports", "prettier-plugin-css-order"]
+}

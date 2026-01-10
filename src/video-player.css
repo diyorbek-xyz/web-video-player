@@ -1,0 +1,105 @@
+#player_container {
+	position: relative;
+	border-radius: 20px;
+	aspect-ratio: 16/9;
+	width: 900px;
+	overflow: hidden;
+	font-size: medium;
+	font-family: sans-serif;
+	color: white;
+	user-select: none;
+}
+#player_container.fullscreen {
+	border-radius: 0;
+}
+
+#video_element {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: red;
+}
+#video {
+	width: 100%;
+}
+#root {
+	display: grid;
+	position: absolute;
+	grid-template-rows: 60px 1fr 30px 60px;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+}
+
+#settings {
+	position: absolute;
+	right: 10px;
+	bottom: 10px;
+	border-radius: 10px;
+	background-color: #0009;
+	width: 35%;
+	height: 70%;
+	overflow-y: auto;
+}
+
+#timeslider_root {
+	height: 100%;
+}
+#controls {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	z-index: 10;
+	padding-inline: 10px;
+	height: 100%;
+}
+#controls > div {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.button {
+	display: flex;
+	position: relative;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	border: none;
+	border-radius: 9999px;
+	background-color: #0009;
+	aspect-ratio: 1;
+	width: 45px;
+	height: 45px;
+	line-height: 0;
+}
+.button::before {
+	position: absolute;
+	opacity: 0%;
+	transition: all ease-out 0.1s;
+	inset: 3px;
+	border-radius: 9999px;
+	background-color: #fff3;
+	content: '';
+}
+.button:hover:before {
+	opacity: 100%;
+}
+.button.time_display {
+	padding-inline: 20px;
+	aspect-ratio: unset;
+	width: unset;
+}
+::-webkit-scrollbar {
+	background-color: transparent;
+	width: 8px;
+}
+::-webkit-scrollbar-thumb {
+	cursor: pointer;
+	border-radius: 100px;
+	background-color: #0009;
+	width: 2px;
+}
+::-webkit-scrollbar-track {
+	margin: 10px;
+}
