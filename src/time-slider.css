@@ -2,18 +2,19 @@
 	display: flex;
 	position: relative;
 	justify-content: center;
-	align-items: center;
+	align-items: end;
 	z-index: 10;
+	cursor: pointer;
 	height: 100%;
 }
 .track {
 	position: absolute;
-	transition: height linear 100ms;
-	width: calc(100% - 20px);
-	height: 7px;
+	transition: height linear 150ms;
+	width: calc(100% - 40px);
+	height: 5px;
 }
 .track.hovering {
-	height: 9px;
+	height: 6px;
 }
 .track.hovering .hover {
 	opacity: 100%;

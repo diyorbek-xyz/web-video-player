@@ -9,7 +9,7 @@ function formatTime(time: number) {
 	return Math.floor(time / 60) + ':' + ('0' + Math.floor(time % 60)).slice(-2);
 }
 function clamp(value: number, min: number, max: number) {
-	return Math.max(Math.min(value, max), min);
+	return Math.max(Math.min(Number(value.toFixed(2)), max), min);
 }
 
 @customElement('time-slider')
@@ -38,7 +38,7 @@ class TimeSlider extends LitElement {
 	}
 	render() {
 		return html`
-			<div id="timeslider" @click=${this.timeset} @mouseup=${this.leave} @mousemove=${this.enter} @mouseleave=${this.exit} @mouseout=${this.exit}>
+			<div id="timeslider" @touchend=${this.exit} @touchstart=${this.move} @touchcancel=${this.exit} @touchmove=${this.move} @click=${this.move} @mousemove=${this.move} @mouseup=${this.exit} @mouseleave=${this.exit} @mouseout=${this.exit}>
 				<div id="track" class="track ${this.hovering ? 'hovering' : ''}">
 					<div class="range">
 						<div class="fill" style="width:${this.position}%"></div>
@@ -55,31 +55,39 @@ class TimeSlider extends LitElement {
 			<img class="big_image ${this.timesetting ? 'active' : ''}" src="/poster.png" />
 		`;
 	}
-	enter(e: MouseEvent) {
-		const rect = this.trackEl.getBoundingClientRect();
-		const timeAtCursor = ((e.clientX - rect.left) / rect.width) * this.duration;
-		this.hovering = true;
-		this.hover_position = clamp((timeAtCursor * 100) / this.duration, 0, 100);
 
-		const previewRect = this.previewEl.getBoundingClientRect();
-		this.preview_time = clamp(timeAtCursor, 0, this.duration);
-		this.preview_position = clamp(e.clientX - previewRect.width / 2, 10, rect.width + rect.left - previewRect.width + 2 - 10);
-
-		if (e.buttons == 1) this.timeset(e);
-		else this.timesetting = false;
-	}
-	timeset(e: MouseEvent) {
+	timeset(clientX: number) {
 		const rect = this.trackEl.getBoundingClientRect();
-		const timeAtCursor = ((e.clientX - rect.left) / rect.width) * this.duration;
-		this.timesetting = true;
+		const timeAtCursor = ((clientX - rect.left) / rect.width) * this.duration;
 		this.seek(clamp(timeAtCursor, 0, this.duration));
 	}
-	leave() {
-		this.timesetting = false;
+	previewing(clientX: number) {
+		const rect = this.trackEl.getBoundingClientRect();
+		const timeAtCursor = ((clientX - rect.left) / rect.width) * this.duration;
+		this.hover_position = clamp((timeAtCursor * 100) / this.duration, 0, 100);
+		const previewRect = this.previewEl.getBoundingClientRect();
+		this.preview_time = clamp(timeAtCursor, 0, this.duration);
+		this.preview_position = clamp(clientX - previewRect.width / 2, 10, rect.width + rect.left - previewRect.width + 2 - 10);
 	}
 	exit() {
+		console.log('Exit');
 		this.timesetting = false;
 		this.hovering = false;
+	}
+	move(e: MouseEvent | TouchEvent) {
+		this.hovering = true;
+		if (e instanceof MouseEvent) {
+			this.previewing(e.clientX);
+			if (e.buttons == 1) {
+				this.timesetting = true;
+				this.timeset(e.clientX);
+			} else {
+				this.timesetting = false;
+			}
+		} else if (e instanceof TouchEvent) {
+			this.previewing(e.touches[0].clientX);
+			this.timeset(e.touches[0].clientX);
+		}
 	}
 }
 
@@ -126,6 +134,15 @@ export class VideoPlayer extends LitElement {
 					<div id="infos_root"></div>
 					<div id="overlays_root">
 						<div id="overlays"></div>
+						<div id="resolution_menu" class="${this._open ? 'open' : ''}">
+							<h3 class="title">Quality</h3>
+							<div class="item">1080p</div>
+							<div class="item">720p</div>
+							<div class="item">480p</div>
+							<div class="item">360p</div>
+							<div class="item">144p</div>
+							<div class="item">Auto</div>
+						</div>
 					</div>
 					<div id="timeslider_root">
 						<time-slider id="timeslider_element" time=${this.time} .seek=${this.seek} duration=${this.duration}></time-slider>
